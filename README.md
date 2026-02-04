@@ -13,7 +13,7 @@ A collaborative AI system that solves coding problems using specialized agents p
 - **Manager Agent** - Coordinates the entire process
 
 **Technology Stack:**
-- Backend: Flask + CrewAI + Gemini 1.5 Flash
+- Backend: Flask + CrewAI + Gemini 2.5 Flash + Ollama
 - Frontend: Vanilla HTML/CSS/JavaScript
 - Custom Tools: Code Validator (AST-based syntax checking)
 
