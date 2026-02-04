@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeetCode-Style Multi-Agent Solver</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app">
+        <header class="topbar">
+            <div class="brand">
+                <div class="brand-mark"></div>
+                <div class="brand-text">
+                    <span class="brand-title">LeetCode-Style Solver</span>
+                    <span class="brand-subtitle">Multi-agent reasoning workspace</span>
+                </div>
+            </div>
+            <nav class="topnav">
+                <span class="nav-item active">Problems</span>
+                <span class="nav-item">Submissions</span>
+                <span class="nav-item">Discuss</span>
+            </nav>
+        </header>
+
+        <main class="layout">
+            <section class="panel problem-panel">
+                <div class="panel-title">
+                    <div>
+                        <h1>Problem</h1>
+                        <p>Paste a LeetCode prompt to get a structured solution.</p>
+                    </div>
+                    <div class="panel-actions">
+                        <span class="kbd">Ctrl</span>
+                        <span class="kbd">Enter</span>
+                        <span class="hint">Run</span>
+                    </div>
+                </div>
+                <textarea 
+                    id="problemInput" 
+                    placeholder="Paste your LeetCode problem description here...&#10;&#10;Example:&#10;Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.&#10;&#10;You may assume that each input would have exactly one solution, and you may not use the same element twice.&#10;&#10;Example 1:&#10;Input: nums = [2,7,11,15], target = 9&#10;Output: [0,1]&#10;Explanation: Because nums[0] + nums[1] == 9, we return [0, 1]."
+                ></textarea>
+                <div class="cta-row">
+                    <button id="solveBtn" onclick="solveProblem()">Run Multi-Agent Solve</button>
+                    <span class="cta-note">Uses 6 specialist agents in sequence.</span>
+                </div>
+            </section>
+
+            <section class="panel results-panel">
+                <div class="panel-title">
+                    <div>
+                        <h2>Solution</h2>
+                        <p>Review the final output and drill into analysis.</p>
+                    </div>
+                    <div class="status-pill">
+                        <span class="dot"></span>
+                        <span>Ready</span>
+                    </div>
+                </div>
+
+                <div class="results-section" id="resultsSection" style="display: none;">
+                    <div class="result-panel">
+                        <div class="panel-header" onclick="togglePanel('explanation')">
+                            <h3>Problem Analysis & Approach</h3>
+                            <span class="toggle-icon">▼</span>
+                        </div>
+                        <div class="panel-content" id="explanation">
+                            <div id="explanationContent"></div>
+                        </div>
+                    </div>
+
+                    <div class="result-panel">
+                        <div class="panel-header" onclick="togglePanel('code')">
+                            <h3>Final Solution Code</h3>
+                            <span class="toggle-icon">▼</span>
+                        </div>
+                        <div class="panel-content" id="code">
+                            <pre><code id="codeContent"></code></pre>
+                        </div>
+                    </div>
+
+                    <div class="result-panel">
+                        <div class="panel-header" onclick="togglePanel('complexity')">
+                            <h3>Complexity Analysis</h3>
+                            <span class="toggle-icon">▼</span>
+                        </div>
+                        <div class="panel-content" id="complexity">
+                            <div id="complexityContent"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="loading" id="loading" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>Agents are collaborating to solve your problem...</p>
+                </div>
+
+                <div class="error-message" id="errorMessage" style="display: none;"></div>
+            </section>
+        </main>
+
+        <section class="panel agents-panel">
+            <div class="panel-title">
+                <div>
+                    <h2>Agent Status</h2>
+                    <p>Each specialist contributes a distinct perspective.</p>
+                </div>
+                <div class="legend">
+                    <span class="legend-item waiting">Waiting</span>
+                    <span class="legend-item thinking">Thinking</span>
+                    <span class="legend-item done">Done</span>
+                </div>
+            </div>
+            <div class="agents-grid">
+                <div class="agent-card" id="agent-analyzer">
+                    <div class="agent-header">
+                        <span class="agent-icon">Analysis</span>
+                        <span class="status-indicator" id="status-analyzer">⏳</span>
+                    </div>
+                    <h3>Problem Analyzer</h3>
+                    <p>Understanding problem structure and constraints</p>
+                </div>
+
+                <div class="agent-card" id="agent-brute">
+                    <div class="agent-header">
+                        <span class="agent-icon">Baseline</span>
+                        <span class="status-indicator" id="status-brute">⏳</span>
+                    </div>
+                    <h3>Brute Force Agent</h3>
+                    <p>Creating baseline solution approach</p>
+                </div>
+
+                <div class="agent-card" id="agent-optimizer">
+                    <div class="agent-header">
+                        <span class="agent-icon">Optimize</span>
+                        <span class="status-indicator" id="status-optimizer">⏳</span>
+                    </div>
+                    <h3>Optimization Agent</h3>
+                    <p>Improving performance and efficiency</p>
+                </div>
+
+                <div class="agent-card" id="agent-edge">
+                    <div class="agent-header">
+                        <span class="agent-icon">Edge</span>
+                        <span class="status-indicator" id="status-edge">⏳</span>
+                    </div>
+                    <h3>Edge Case Agent</h3>
+                    <p>Validating solution robustness</p>
+                </div>
+
+                <div class="agent-card" id="agent-code">
+                    <div class="agent-header">
+                        <span class="agent-icon">Code</span>
+                        <span class="status-indicator" id="status-code">⏳</span>
+                    </div>
+                    <h3>Code Generator</h3>
+                    <p>Writing clean, production-ready code</p>
+                </div>
+
+                <div class="agent-card" id="agent-manager">
+                    <div class="agent-header">
+                        <span class="agent-icon">Manager</span>
+                        <span class="status-indicator" id="status-manager">⏳</span>
+                    </div>
+                    <h3>Manager Agent</h3>
+                    <p>Coordinating final solution</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
